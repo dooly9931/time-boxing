@@ -11,8 +11,8 @@ export function useDayData(date: string) {
     setLoaded(false);
     fetch(`/api/days/${date}`)
       .then((r) => r.json())
-      .then((data: ApiTask[]) => {
-        setTasks(data);
+      .then((data) => {
+        setTasks(Array.isArray(data) ? data : []);
         setLoaded(true);
       });
   }, [date]);
