@@ -53,6 +53,7 @@ export function useDayData(date: string) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ date, blockTime, text, category: "timeboxed" }),
       });
+      if (!res.ok) return;
       const task: ApiTask = await res.json();
       setTasks((prev) => [...prev, task]);
     },
@@ -67,6 +68,7 @@ export function useDayData(date: string) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ date, text, category: "braindump" }),
       });
+      if (!res.ok) return;
       const task: ApiTask = await res.json();
       setTasks((prev) => [...prev, task]);
     },
@@ -81,6 +83,7 @@ export function useDayData(date: string) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ date, text, category: "top3", priority }),
       });
+      if (!res.ok) return;
       const task: ApiTask = await res.json();
       setTasks((prev) => [...prev, task]);
     },
