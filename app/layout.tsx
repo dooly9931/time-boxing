@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import BottomNav from "@/components/BottomNav";
+import Providers from "@/components/Providers";
 
 export const metadata: Metadata = {
   title: "타임박싱 플래너",
@@ -22,10 +23,12 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        <main className="max-w-lg mx-auto pb-20 min-h-screen">
-          {children}
-        </main>
-        <BottomNav />
+        <Providers>
+          <main className="max-w-lg mx-auto pb-20 min-h-screen">
+            {children}
+          </main>
+          <BottomNav />
+        </Providers>
       </body>
     </html>
   );
