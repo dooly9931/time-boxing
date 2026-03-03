@@ -19,6 +19,7 @@ export async function PATCH(
     if (body.category !== "top3") data.priority = null;
   }
   if (body.priority === null || [1, 2, 3].includes(body.priority)) data.priority = body.priority;
+  if (typeof body.date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(body.date)) data.date = body.date;
 
   if (Object.keys(data).length === 0) {
     return NextResponse.json({ error: "No valid fields" }, { status: 400 });

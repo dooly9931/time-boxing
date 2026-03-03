@@ -24,6 +24,7 @@ export default function DayView({ date }: Props) {
     addTop3,
     promoteToTop3,
     demoteFromTop3,
+    importTask,
     toggleTask,
     deleteTask,
     loaded,
@@ -56,6 +57,8 @@ export default function DayView({ date }: Props) {
         onToggle={(id) => toggleTask("", id)}
         onDelete={(id) => deleteTask("", id)}
         onPromote={promoteToTop3}
+        onImport={importTask}
+        onCopy={addBrainDump}
         top3Count={top3Tasks.length}
       />
 

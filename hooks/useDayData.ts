@@ -132,6 +132,25 @@ export function useDayData(date: string) {
     [tasks]
   );
 
+  // Move an existing task (from another date) into today's brain dump
+  const importTask = useCallback(
+    async (taskId: string, text: string) => {
+      const res = await fetch(`/api/tasks/${taskId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ date, category: "braindump", priority: null }),
+      });
+      if (res.ok) {
+        const now = new Date().toISOString();
+        setTasks((prev) => [
+          ...prev,
+          { id: taskId, date, blockTime: null, text, done: false, category: "braindump", priority: null, createdAt: now },
+        ]);
+      }
+    },
+    [date]
+  );
+
   // Delete (works for all categories)
   const deleteTask = useCallback(
     async (_blockTime: string, taskId: string) => {
@@ -151,6 +170,7 @@ export function useDayData(date: string) {
     promoteToTop3,
     demoteFromTop3,
     toggleTask,
+    importTask,
     deleteTask,
     loaded,
   };

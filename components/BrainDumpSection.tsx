@@ -1,6 +1,8 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { ApiTask } from "@/lib/types";
+import { formatShortDate } from "@/lib/dateUtils";
 import TaskInput from "./TaskInput";
 
 interface Props {
@@ -9,6 +11,8 @@ interface Props {
   onToggle: (taskId: string) => void;
   onDelete: (taskId: string) => void;
   onPromote: (taskId: string, priority: number) => void;
+  onImport: (taskId: string, text: string) => void;
+  onCopy: (text: string) => void;
   top3Count: number;
 }
 
@@ -18,16 +22,61 @@ export default function BrainDumpSection({
   onToggle,
   onDelete,
   onPromote,
+  onImport,
+  onCopy,
   top3Count,
 }: Props) {
   const canPromote = top3Count < 3;
+  const [showImport, setShowImport] = useState(false);
+  const [incomplete, setIncomplete] = useState<ApiTask[]>([]);
+  const [importLoading, setImportLoading] = useState(false);
+
+  useEffect(() => {
+    if (!showImport) return;
+    setImportLoading(true);
+    fetch("/api/incomplete")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        setIncomplete(Array.isArray(data) ? data : []);
+        setImportLoading(false);
+      });
+  }, [showImport]);
+
+  const handleMove = (task: ApiTask) => {
+    onImport(task.id, task.text);
+    setIncomplete((prev) => prev.filter((t) => t.id !== task.id));
+  };
+
+  const handleCopy = (task: ApiTask) => {
+    onCopy(task.text);
+    setIncomplete((prev) => prev.filter((t) => t.id !== task.id));
+  };
 
   return (
     <div className="px-5 py-3">
       <div className="flex items-center justify-between mb-2">
         <h2 className="text-[13px] font-medium text-olive">Brain Dump</h2>
-        <span className="text-[11px] text-gray-300">생각나는 것 모두 적어보세요</span>
+        <button
+          onClick={() => setShowImport(!showImport)}
+          className={`text-[11px] px-2 py-0.5 rounded-lg transition-colors ${
+            showImport
+              ? "bg-olive text-white"
+              : "text-gray-400 hover:text-olive hover:bg-cream"
+          }`}
+        >
+          {showImport ? "닫기" : "미완료 가져오기"}
+        </button>
       </div>
+
+      {showImport && (
+        <ImportPanel
+          items={incomplete}
+          loading={importLoading}
+          onMove={handleMove}
+          onCopy={handleCopy}
+        />
+      )}
+
       <div className="bg-cream/40 rounded-xl p-3 space-y-1">
         {tasks.map((task) => (
           <BrainDumpItem
@@ -44,6 +93,75 @@ export default function BrainDumpSection({
         ))}
         <TaskInput onAdd={onAdd} />
       </div>
+    </div>
+  );
+}
+
+function ImportPanel({
+  items,
+  loading,
+  onMove,
+  onCopy,
+}: {
+  items: ApiTask[];
+  loading: boolean;
+  onMove: (task: ApiTask) => void;
+  onCopy: (task: ApiTask) => void;
+}) {
+  if (loading) {
+    return (
+      <div className="mb-3 p-3 bg-cream/40 rounded-xl text-center text-[11px] text-gray-300">
+        로딩 중...
+      </div>
+    );
+  }
+
+  if (items.length === 0) {
+    return (
+      <div className="mb-3 p-3 bg-cream/40 rounded-xl text-center text-[11px] text-gray-400">
+        미완료 작업이 없습니다
+      </div>
+    );
+  }
+
+  // Group by date
+  const byDate: Record<string, ApiTask[]> = {};
+  for (const t of items) {
+    if (!byDate[t.date]) byDate[t.date] = [];
+    byDate[t.date].push(t);
+  }
+  const dates = Object.keys(byDate).sort((a, b) => b.localeCompare(a));
+
+  return (
+    <div className="mb-3 bg-cream/40 rounded-xl p-3 max-h-60 overflow-y-auto space-y-2">
+      {dates.map((date) => (
+        <div key={date}>
+          <p className="text-[11px] text-gray-400 mb-1">{formatShortDate(date)}</p>
+          {byDate[date].map((task) => (
+            <div
+              key={task.id}
+              className="flex items-center gap-2 py-1.5 pl-1"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0" />
+              <span className="flex-1 text-[12px] text-gray-600 truncate">
+                {task.text}
+              </span>
+              <button
+                onClick={() => onMove(task)}
+                className="text-[10px] px-1.5 py-0.5 rounded bg-olive text-white hover:bg-olive-dark transition-colors"
+              >
+                이동
+              </button>
+              <button
+                onClick={() => onCopy(task)}
+                className="text-[10px] px-1.5 py-0.5 rounded bg-beige text-gray-600 hover:bg-sand transition-colors"
+              >
+                복사
+              </button>
+            </div>
+          ))}
+        </div>
+      ))}
     </div>
   );
 }
