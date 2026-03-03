@@ -2,12 +2,19 @@
 
 import { useState, useEffect } from "react";
 import { Task } from "@/lib/types";
-import { getAllDayKeys, getDayData } from "@/lib/storage";
-import { today } from "@/lib/dateUtils";
 
 export interface IncompleteGroup {
   date: string;
   tasks: (Task & { blockTime: string })[];
+}
+
+interface ApiTask {
+  id: string;
+  date: string;
+  blockTime: string;
+  text: string;
+  done: boolean;
+  createdAt: string;
 }
 
 export function useIncomplete() {
@@ -15,30 +22,26 @@ export function useIncomplete() {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    const todayStr = today();
-    const allKeys = getAllDayKeys();
-    const result: IncompleteGroup[] = [];
-
-    for (const date of allKeys) {
-      if (date >= todayStr) continue;
-      const dayData = getDayData(date);
-      const tasks: (Task & { blockTime: string })[] = [];
-
-      for (const [blockTime, blockTasks] of Object.entries(dayData.blocks)) {
-        for (const task of blockTasks) {
-          if (!task.done) {
-            tasks.push({ ...task, blockTime });
-          }
+    fetch("/api/incomplete")
+      .then((r) => r.json())
+      .then((tasks: ApiTask[]) => {
+        const byDate: Record<string, (Task & { blockTime: string })[]> = {};
+        for (const t of tasks) {
+          if (!byDate[t.date]) byDate[t.date] = [];
+          byDate[t.date].push({
+            id: t.id,
+            text: t.text,
+            done: t.done,
+            createdAt: t.createdAt,
+            blockTime: t.blockTime,
+          });
         }
-      }
-
-      if (tasks.length > 0) {
-        result.push({ date, tasks });
-      }
-    }
-
-    setGroups(result);
-    setLoaded(true);
+        const result = Object.entries(byDate)
+          .map(([date, tasks]) => ({ date, tasks }))
+          .sort((a, b) => b.date.localeCompare(a.date));
+        setGroups(result);
+        setLoaded(true);
+      });
   }, []);
 
   return { groups, loaded };

@@ -1,66 +1,78 @@
 "use client";
 
-import { useCallback } from "react";
-import { useLocalStorage } from "./useLocalStorage";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { DayData, Task } from "@/lib/types";
 
-function genId(): string {
-  return Math.random().toString(36).slice(2, 10);
+interface ApiTask {
+  id: string;
+  date: string;
+  blockTime: string;
+  text: string;
+  done: boolean;
+  createdAt: string;
 }
 
 export function useDayData(date: string) {
-  const [dayData, setDayData, loaded] = useLocalStorage<DayData>(
-    `tbp_day_${date}`,
-    { date, blocks: {} }
-  );
+  const [tasks, setTasks] = useState<ApiTask[]>([]);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    setLoaded(false);
+    fetch(`/api/days/${date}`)
+      .then((r) => r.json())
+      .then((data: ApiTask[]) => {
+        setTasks(data);
+        setLoaded(true);
+      });
+  }, [date]);
+
+  const dayData: DayData = useMemo(() => {
+    const blocks: Record<string, Task[]> = {};
+    for (const t of tasks) {
+      if (!blocks[t.blockTime]) blocks[t.blockTime] = [];
+      blocks[t.blockTime].push({
+        id: t.id,
+        text: t.text,
+        done: t.done,
+        createdAt: t.createdAt,
+      });
+    }
+    return { date, blocks };
+  }, [tasks, date]);
 
   const addTask = useCallback(
-    (blockTime: string, text: string) => {
-      const task: Task = {
-        id: genId(),
-        text,
-        done: false,
-        createdAt: new Date().toISOString(),
-      };
-      setDayData((prev) => ({
-        ...prev,
-        blocks: {
-          ...prev.blocks,
-          [blockTime]: [...(prev.blocks[blockTime] || []), task],
-        },
-      }));
+    async (blockTime: string, text: string) => {
+      const res = await fetch("/api/tasks", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ date, blockTime, text }),
+      });
+      const task: ApiTask = await res.json();
+      setTasks((prev) => [...prev, task]);
     },
-    [setDayData]
+    [date]
   );
 
   const toggleTask = useCallback(
-    (blockTime: string, taskId: string) => {
-      setDayData((prev) => ({
-        ...prev,
-        blocks: {
-          ...prev.blocks,
-          [blockTime]: (prev.blocks[blockTime] || []).map((t) =>
-            t.id === taskId ? { ...t, done: !t.done } : t
-          ),
-        },
-      }));
+    async (_blockTime: string, taskId: string) => {
+      setTasks((prev) =>
+        prev.map((t) => (t.id === taskId ? { ...t, done: !t.done } : t))
+      );
+      fetch(`/api/tasks/${taskId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ done: !(tasks.find((t) => t.id === taskId)?.done) }),
+      });
     },
-    [setDayData]
+    [tasks]
   );
 
   const deleteTask = useCallback(
-    (blockTime: string, taskId: string) => {
-      setDayData((prev) => ({
-        ...prev,
-        blocks: {
-          ...prev.blocks,
-          [blockTime]: (prev.blocks[blockTime] || []).filter(
-            (t) => t.id !== taskId
-          ),
-        },
-      }));
+    async (_blockTime: string, taskId: string) => {
+      setTasks((prev) => prev.filter((t) => t.id !== taskId));
+      fetch(`/api/tasks/${taskId}`, { method: "DELETE" });
     },
-    [setDayData]
+    []
   );
 
   return { dayData, addTask, toggleTask, deleteTask, loaded };

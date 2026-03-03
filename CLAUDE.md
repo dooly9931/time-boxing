@@ -6,7 +6,7 @@
 ## Tech Stack
 - Next.js 16 (App Router), React 19, TypeScript
 - Tailwind CSS 4 (via @tailwindcss/postcss)
-- localStorage (MVP), 향후 Prisma + Supabase + next-auth 예정
+- Prisma + SQLite (DB), NextAuth.js v5 (Google OAuth)
 - Vitest + React Testing Library (단위/통합 테스트)
 
 ## Development Rules
@@ -20,15 +20,23 @@
 ### File Structure
 ```
 app/                    # Next.js 페이지 (App Router)
+  api/                  # API Route Handlers
+    auth/               # NextAuth 핸들러
+    settings/           # 설정 CRUD
+    days/[date]/        # 날짜별 작업 조회
+    tasks/              # 작업 CRUD
+    incomplete/         # 미완료 작업 조회
+  login/                # 로그인 페이지
 components/             # React 컴포넌트
-hooks/                  # 커스텀 React 훅
+hooks/                  # 커스텀 React 훅 (API fetch 기반)
 lib/                    # 유틸리티 & 타입
+  auth.ts               # NextAuth 설정
+  prisma.ts             # Prisma client singleton
+  apiAuth.ts            # API 인증 헬퍼
+prisma/                 # Prisma 스키마 & 마이그레이션
 docs/                   # 스펙 문서
   spec.md               # 전체 스펙 (계층화)
 __tests__/              # 테스트 파일
-  lib/                  # lib/ 테스트
-  hooks/                # hooks/ 테스트
-  components/           # 컴포넌트 테스트
 ```
 
 ### Commands
@@ -36,3 +44,13 @@ __tests__/              # 테스트 파일
 - `npm run build` - 프로덕션 빌드
 - `npm test` - 테스트 실행
 - `npm run test:watch` - 테스트 watch 모드
+- `npx prisma migrate dev` - DB 마이그레이션
+- `npx prisma studio` - DB GUI
+
+### Environment Variables (.env)
+```
+DATABASE_URL="file:./dev.db"
+AUTH_SECRET="..."
+AUTH_GOOGLE_ID="..."
+AUTH_GOOGLE_SECRET="..."
+```
