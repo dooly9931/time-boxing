@@ -9,9 +9,9 @@ export function useTags() {
 
   useEffect(() => {
     fetch("/api/tags")
-      .then((r) => r.json())
-      .then((data: Tag[]) => {
-        setTags(data);
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        setTags(Array.isArray(data) ? data : []);
         setLoaded(true);
       });
   }, []);

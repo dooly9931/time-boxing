@@ -9,9 +9,11 @@ export function useStreak() {
 
   const refresh = useCallback(() => {
     fetch("/api/streak")
-      .then((r) => r.json())
-      .then((data: StreakData) => {
-        setStreak(data);
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data && typeof data === "object") {
+          setStreak(data);
+        }
         setLoaded(true);
       });
   }, []);

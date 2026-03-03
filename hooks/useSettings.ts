@@ -10,13 +10,15 @@ export function useSettings() {
 
   useEffect(() => {
     fetch("/api/settings")
-      .then((r) => r.json())
+      .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
-        setSettingsState({
-          timeUnit: data.timeUnit ?? DEFAULT_SETTINGS.timeUnit,
-          dayStart: data.dayStart ?? DEFAULT_SETTINGS.dayStart,
-          dayEnd: data.dayEnd ?? DEFAULT_SETTINGS.dayEnd,
-        });
+        if (data && typeof data === "object") {
+          setSettingsState({
+            timeUnit: data.timeUnit ?? DEFAULT_SETTINGS.timeUnit,
+            dayStart: data.dayStart ?? DEFAULT_SETTINGS.dayStart,
+            dayEnd: data.dayEnd ?? DEFAULT_SETTINGS.dayEnd,
+          });
+        }
         setLoaded(true);
       });
   }, []);

@@ -10,7 +10,7 @@ export function useDayData(date: string) {
   useEffect(() => {
     setLoaded(false);
     fetch(`/api/days/${date}`)
-      .then((r) => r.json())
+      .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
         setTasks(Array.isArray(data) ? data : []);
         setLoaded(true);

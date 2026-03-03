@@ -14,8 +14,9 @@ export function useIncomplete() {
 
   useEffect(() => {
     fetch("/api/incomplete")
-      .then((r) => r.json())
-      .then((tasks: ApiTask[]) => {
+      .then((r) => (r.ok ? r.json() : null))
+      .then((tasks) => {
+        if (!Array.isArray(tasks)) { setLoaded(true); return; }
         const byDate: Record<string, (Task & { blockTime: string; category: string })[]> = {};
         for (const t of tasks) {
           if (!byDate[t.date]) byDate[t.date] = [];
