@@ -18,7 +18,7 @@ export default function TaskInput({ onAdd }: Props) {
           setEditing(true);
           setTimeout(() => inputRef.current?.focus(), 0);
         }}
-        className="text-xs text-gray-400 py-1 hover:text-primary transition-colors"
+        className="text-[11px] text-gray-300 py-0.5 hover:text-olive-light transition-colors"
       >
         + 추가
       </button>
@@ -40,7 +40,7 @@ export default function TaskInput({ onAdd }: Props) {
         e.preventDefault();
         submit();
       }}
-      className="flex gap-1 py-1"
+      className="flex gap-1 py-0.5"
     >
       <input
         ref={inputRef}
@@ -49,7 +49,7 @@ export default function TaskInput({ onAdd }: Props) {
         onChange={(e) => setText(e.target.value)}
         onBlur={submit}
         placeholder="할 일 입력..."
-        className="flex-1 text-sm bg-transparent border-b border-gray-200 focus:border-primary outline-none py-0.5 placeholder-gray-300"
+        className="flex-1 text-[13px] bg-transparent border-b border-beige focus:border-olive outline-none py-0.5 placeholder-gray-300 transition-colors"
       />
     </form>
   );

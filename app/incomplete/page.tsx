@@ -8,8 +8,9 @@ export default function IncompletePage() {
 
   return (
     <>
-      <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-sm border-b border-gray-100 px-4 py-3">
-        <h1 className="text-base font-semibold text-center">미완료 작업</h1>
+      <div className="sticky top-0 z-10 bg-warm-white/95 backdrop-blur-sm px-5 py-4">
+        <h1 className="text-[15px] font-semibold text-center text-gray-800 tracking-tight">미완료 작업</h1>
+        <div className="mt-3 h-px bg-gradient-to-r from-transparent via-sand to-transparent" />
       </div>
       <IncompleteView
         onNavigate={(date) => {

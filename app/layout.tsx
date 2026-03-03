@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        <main className="max-w-lg mx-auto pb-16 min-h-screen">
+        <main className="max-w-lg mx-auto pb-20 min-h-screen">
           {children}
         </main>
         <BottomNav />

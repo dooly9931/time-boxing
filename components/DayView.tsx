@@ -27,11 +27,15 @@ export default function DayView({ date }: Props) {
   }, [loaded, date]);
 
   if (!loaded) {
-    return <div className="p-8 text-center text-gray-400">로딩 중...</div>;
+    return (
+      <div className="p-12 text-center text-gray-300 text-sm">
+        로딩 중...
+      </div>
+    );
   }
 
   return (
-    <div className="px-2">
+    <div className="px-3 pt-1">
       {timeBlocks.map((time) => {
         const isCurrent = time === currentBlock;
         const isHour = time.endsWith(":00");

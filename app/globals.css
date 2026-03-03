@@ -5,18 +5,31 @@
     system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo",
     "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji",
     "Segoe UI Symbol", sans-serif;
-  --color-primary: #2563eb;
-  --color-primary-light: #dbeafe;
-  --color-danger: #ef4444;
-  --color-success: #22c55e;
-  --color-gray-50: #f9fafb;
-  --color-gray-100: #f3f4f6;
-  --color-gray-200: #e5e7eb;
-  --color-gray-300: #d1d5db;
-  --color-gray-400: #9ca3af;
-  --color-gray-500: #6b7280;
-  --color-gray-700: #374151;
-  --color-gray-900: #111827;
+  --font-serif: "Georgia", "Noto Serif KR", "Times New Roman", serif;
+
+  /* Sofia theme: olive green + beige + warm neutrals */
+  --color-olive: #5C6B4F;
+  --color-olive-dark: #3D4A33;
+  --color-olive-light: #8A9A7B;
+  --color-cream: #F5F0E8;
+  --color-beige: #E8DFD0;
+  --color-sand: #D4C9B8;
+  --color-warm-white: #FDFBF7;
+  --color-accent: #C4956A;
+  --color-accent-light: #E8D5C0;
+  --color-danger: #C17B6E;
+  --color-success: #7B9A6D;
+
+  --color-gray-50: #FAF8F5;
+  --color-gray-100: #F0EDE7;
+  --color-gray-200: #E0DBD2;
+  --color-gray-300: #C8C1B5;
+  --color-gray-400: #A39B8E;
+  --color-gray-500: #7D756A;
+  --color-gray-600: #5E574E;
+  --color-gray-700: #433E37;
+  --color-gray-800: #2E2A25;
+  --color-gray-900: #1A1815;
 }
 
 * {
@@ -25,12 +38,11 @@
 
 body {
   font-family: var(--font-sans);
-  background-color: var(--color-gray-50);
-  color: var(--color-gray-900);
+  background-color: var(--color-warm-white);
+  color: var(--color-gray-800);
   -webkit-font-smoothing: antialiased;
 }
 
-/* Hide scrollbar but keep scroll functionality */
 .hide-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;

@@ -83,7 +83,7 @@ interface DayData {
   - 페이지 로드 시 현재 시간 블록으로 자동 스크롤
 - **TimeBlock**: 시간 라벨 + 작업 목록 + "+ 추가" 버튼
 - **TaskItem**: 완료 토글(원형 버튼) + 텍스트 + 삭제(텍스트 탭 후 노출)
-  - 완료 시: 초록 체크마크, 텍스트 취소선 + 회색
+  - 완료 시: 올리브 체크마크, 텍스트 취소선 + 회색
 - **TaskInput**: "+ 추가" 클릭 시 인라인 텍스트 입력
   - Enter 또는 blur로 제출
 - URL 파라미터 `?date=YYYY-MM-DD`로 특정 날짜 직접 접근 가능
@@ -91,8 +91,8 @@ interface DayData {
 ### 3.4 미완료 뷰 (`/incomplete`)
 - 오늘 이전 날짜의 `done: false` 작업을 역순으로 그룹핑
 - 각 그룹: 날짜 헤더(클릭 시 해당 날짜로 이동) + 작업 목록
-- 작업 항목: 빨간 점 + 텍스트 + 블록 시간
-- 미완료 없을 시 "🎉 미완료 작업이 없습니다!" 표시
+- 작업 항목: 엑센트 점 + 텍스트 + 블록 시간
+- 미완료 없을 시 올리브 체크 아이콘 + "미완료 작업이 없습니다" 표시
 
 ### 3.5 설정 뷰 (`/settings`)
 - **시간 단위**: 4개 버튼 (5/10/15/30분), 세그먼트 컨트롤 스타일
@@ -125,17 +125,33 @@ interface DayData {
 
 ---
 
-## 5. 스타일 시스템
+## 5. 스타일 시스템 (Sofia 테마)
+
+Pinterest "Sofia Social Media Kit" 디자인 기반. 올리브 그린 + 베이지/크림의 자연스러운 톤.
 
 ### 5.1 색상 (CSS 변수)
 | 변수 | 값 | 용도 |
 |------|----|------|
-| `--color-primary` | `#2563eb` | 강조, 활성 탭, 현재 블록 |
-| `--color-primary-light` | `#dbeafe` | 현재 블록 배경 |
-| `--color-danger` | `#ef4444` | 삭제 버튼, 미완료 표시 |
-| `--color-success` | `#22c55e` | 완료 체크마크 |
+| `--color-olive` | `#5C6B4F` | 강조, 완료 체크, 활성 버튼 |
+| `--color-olive-dark` | `#3D4A33` | 활성 탭 텍스트, 호버 |
+| `--color-olive-light` | `#8A9A7B` | 호버 상태 |
+| `--color-cream` | `#F5F0E8` | 카드/입력 배경 |
+| `--color-beige` | `#E8DFD0` | 보더, 구분선 |
+| `--color-sand` | `#D4C9B8` | 그라데이션 구분선 |
+| `--color-warm-white` | `#FDFBF7` | 페이지 배경 |
+| `--color-accent` | `#C4956A` | 미완료 표시 점 |
+| `--color-danger` | `#C17B6E` | 삭제 버튼 |
+| `--color-success` | `#7B9A6D` | (예비) |
 
 ### 5.2 타이포그래피
-- Pretendard 폰트 패밀리 (시스템 폰트 폴백)
-- 본문: `text-sm` (14px)
-- 헤더: `text-base` (16px) + `font-semibold`
+- 본문: Pretendard (시스템 폰트 폴백), 13px
+- 헤더: 15px + `font-semibold` + `tracking-tight`
+- 보조 텍스트: 11px, `text-gray-300` ~ `text-gray-400`
+- 보조 세리프: Georgia / Noto Serif KR (향후 장식용)
+
+### 5.3 디자인 패턴
+- 그라데이션 구분선: `bg-gradient-to-r from-transparent via-sand to-transparent`
+- 헤더 반투명: `bg-warm-white/95 backdrop-blur-sm`
+- 현재 블록: `bg-cream/60 border-l-2 border-l-olive`
+- 라운딩: `rounded-xl` (카드, 버튼)
+- SVG 아이콘 (이모지 대신) - 하단 네비, 미완료 빈 상태 등

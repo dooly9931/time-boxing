@@ -11,13 +11,13 @@ export default function SettingsView() {
   const { settings, setSettings, loaded } = useSettings();
 
   if (!loaded) {
-    return <div className="p-8 text-center text-gray-400">로딩 중...</div>;
+    return <div className="p-12 text-center text-gray-300 text-sm">로딩 중...</div>;
   }
 
   return (
-    <div className="px-4 py-4 space-y-6">
+    <div className="px-5 py-5 space-y-7">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-[13px] font-medium text-gray-600 mb-3">
           시간 단위
         </label>
         <div className="grid grid-cols-4 gap-2">
@@ -25,10 +25,10 @@ export default function SettingsView() {
             <button
               key={unit}
               onClick={() => setSettings({ ...settings, timeUnit: unit })}
-              className={`py-2 rounded-lg text-sm font-medium transition-colors ${
+              className={`py-2.5 rounded-xl text-[13px] font-medium transition-all ${
                 settings.timeUnit === unit
-                  ? "bg-primary text-white"
-                  : "bg-gray-100 text-gray-600"
+                  ? "bg-olive text-white shadow-sm"
+                  : "bg-cream text-gray-500 hover:bg-beige"
               }`}
             >
               {unit}분
@@ -38,7 +38,7 @@ export default function SettingsView() {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-[13px] font-medium text-gray-600 mb-3">
           하루 시작 시간
         </label>
         <select
@@ -46,7 +46,7 @@ export default function SettingsView() {
           onChange={(e) =>
             setSettings({ ...settings, dayStart: e.target.value })
           }
-          className="w-full p-2.5 bg-gray-100 rounded-lg text-sm outline-none focus:ring-2 focus:ring-primary"
+          className="w-full p-3 bg-cream rounded-xl text-[13px] text-gray-700 outline-none focus:ring-2 focus:ring-olive/30 transition-shadow"
         >
           {HOUR_OPTIONS.map((opt) => (
             <option key={opt} value={opt}>
@@ -57,7 +57,7 @@ export default function SettingsView() {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-[13px] font-medium text-gray-600 mb-3">
           하루 종료 시간
         </label>
         <select
@@ -65,7 +65,7 @@ export default function SettingsView() {
           onChange={(e) =>
             setSettings({ ...settings, dayEnd: e.target.value })
           }
-          className="w-full p-2.5 bg-gray-100 rounded-lg text-sm outline-none focus:ring-2 focus:ring-primary"
+          className="w-full p-3 bg-cream rounded-xl text-[13px] text-gray-700 outline-none focus:ring-2 focus:ring-olive/30 transition-shadow"
         >
           {HOUR_OPTIONS.map((opt) => (
             <option key={opt} value={opt}>
@@ -75,9 +75,10 @@ export default function SettingsView() {
         </select>
       </div>
 
-      <div className="pt-4 border-t border-gray-100">
-        <p className="text-xs text-gray-400 text-center">
-          설정은 자동으로 저장됩니다.
+      <div className="pt-5">
+        <div className="h-px bg-gradient-to-r from-transparent via-beige to-transparent mb-4" />
+        <p className="text-[11px] text-gray-300 text-center">
+          설정은 자동으로 저장됩니다
         </p>
       </div>
     </div>

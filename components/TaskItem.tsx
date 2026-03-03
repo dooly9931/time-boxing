@@ -14,7 +14,7 @@ export default function TaskItem({ task, onToggle, onDelete }: Props) {
 
   return (
     <div
-      className="flex items-center gap-2 py-1 group"
+      className="flex items-center gap-2.5 py-1 group"
       onClick={() => setShowDelete(false)}
     >
       <button
@@ -22,21 +22,21 @@ export default function TaskItem({ task, onToggle, onDelete }: Props) {
           e.stopPropagation();
           onToggle();
         }}
-        className={`w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-colors ${
+        className={`w-[18px] h-[18px] rounded-full border-[1.5px] flex-shrink-0 flex items-center justify-center transition-all ${
           task.done
-            ? "bg-success border-success"
-            : "border-gray-300"
+            ? "bg-olive border-olive"
+            : "border-sand hover:border-olive-light"
         }`}
       >
         {task.done && (
-          <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+          <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
           </svg>
         )}
       </button>
       <span
-        className={`flex-1 text-sm ${
-          task.done ? "line-through text-gray-400" : "text-gray-900"
+        className={`flex-1 text-[13px] leading-snug transition-colors ${
+          task.done ? "line-through text-gray-300" : "text-gray-700"
         }`}
         onClick={(e) => {
           e.stopPropagation();
@@ -51,7 +51,7 @@ export default function TaskItem({ task, onToggle, onDelete }: Props) {
             e.stopPropagation();
             onDelete();
           }}
-          className="text-xs text-danger px-2 py-1 rounded bg-red-50 flex-shrink-0"
+          className="text-[11px] text-danger px-2 py-0.5 rounded-full bg-danger/10 flex-shrink-0 transition-colors hover:bg-danger/20"
         >
           삭제
         </button>

@@ -27,16 +27,20 @@ export default function TimeBlock({
 
   return (
     <div
-      className={`flex border-t ${
-        isCurrent ? "border-l-3 border-l-primary bg-primary-light/30" : "border-l-3 border-l-transparent"
-      } ${isHour ? "border-t-gray-200" : "border-t-gray-100"}`}
+      className={`flex transition-colors ${
+        isCurrent
+          ? "bg-cream/60 border-l-2 border-l-olive"
+          : "border-l-2 border-l-transparent"
+      } ${isHour ? "border-t border-t-beige" : ""}`}
     >
-      <div className={`w-16 flex-shrink-0 pt-2 pr-2 text-right ${
-        isHour ? "text-xs font-medium text-gray-700" : "text-xs text-gray-400"
+      <div className={`w-14 flex-shrink-0 pt-2.5 pr-3 text-right ${
+        isHour
+          ? "text-[11px] font-medium text-gray-600"
+          : "text-[11px] text-gray-300"
       }`}>
         {isHour ? `${h}:${m}` : `:${m}`}
       </div>
-      <div className="flex-1 py-1 pl-2 min-h-[2.5rem]">
+      <div className="flex-1 py-1.5 pl-3 min-h-[2.5rem] border-l border-l-gray-100">
         {tasks.map((task) => (
           <TaskItem
             key={task.id}
