@@ -13,7 +13,8 @@ export async function GET(
 
   const tasks = await prisma.task.findMany({
     where: { userId: user.id, date },
-    orderBy: [{ blockTime: "asc" }, { createdAt: "asc" }],
+    include: { tags: { include: { tag: true } } },
+    orderBy: [{ category: "asc" }, { priority: "asc" }, { blockTime: "asc" }, { createdAt: "asc" }],
   });
 
   return NextResponse.json(tasks);

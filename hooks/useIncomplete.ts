@@ -1,20 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Task } from "@/lib/types";
+import { Task, ApiTask } from "@/lib/types";
 
 export interface IncompleteGroup {
   date: string;
-  tasks: (Task & { blockTime: string })[];
-}
-
-interface ApiTask {
-  id: string;
-  date: string;
-  blockTime: string;
-  text: string;
-  done: boolean;
-  createdAt: string;
+  tasks: (Task & { blockTime: string; category: string })[];
 }
 
 export function useIncomplete() {
@@ -25,7 +16,7 @@ export function useIncomplete() {
     fetch("/api/incomplete")
       .then((r) => r.json())
       .then((tasks: ApiTask[]) => {
-        const byDate: Record<string, (Task & { blockTime: string })[]> = {};
+        const byDate: Record<string, (Task & { blockTime: string; category: string })[]> = {};
         for (const t of tasks) {
           if (!byDate[t.date]) byDate[t.date] = [];
           byDate[t.date].push({
@@ -33,7 +24,8 @@ export function useIncomplete() {
             text: t.text,
             done: t.done,
             createdAt: t.createdAt,
-            blockTime: t.blockTime,
+            blockTime: t.blockTime ?? (t.category === "top3" ? "Top 3" : "메모"),
+            category: t.category,
           });
         }
         const result = Object.entries(byDate)

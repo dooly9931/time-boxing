@@ -14,6 +14,11 @@ export async function PATCH(
   const data: Record<string, unknown> = {};
   if (typeof body.done === "boolean") data.done = body.done;
   if (typeof body.text === "string" && body.text.length > 0 && body.text.length <= 500) data.text = body.text;
+  if (typeof body.category === "string" && ["braindump", "top3", "timeboxed"].includes(body.category)) {
+    data.category = body.category;
+    if (body.category !== "top3") data.priority = null;
+  }
+  if (body.priority === null || [1, 2, 3].includes(body.priority)) data.priority = body.priority;
 
   if (Object.keys(data).length === 0) {
     return NextResponse.json({ error: "No valid fields" }, { status: 400 });

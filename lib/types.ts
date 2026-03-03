@@ -21,3 +21,27 @@ export const DEFAULT_SETTINGS: Settings = {
   dayStart: "06:00",
   dayEnd: "23:00",
 };
+
+export interface ApiTask {
+  id: string;
+  date: string;
+  blockTime: string | null;
+  text: string;
+  done: boolean;
+  category: "braindump" | "top3" | "timeboxed";
+  priority: number | null;
+  createdAt: string;
+  tags?: { tagId: string; tag: Tag }[];
+}
+
+export interface Tag {
+  id: string;
+  name: string;
+  color: string;
+}
+
+export interface StreakData {
+  currentStreak: number;
+  longestStreak: number;
+  todayStars: number;
+}
