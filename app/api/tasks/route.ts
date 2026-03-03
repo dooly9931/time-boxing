@@ -8,6 +8,14 @@ export async function POST(req: Request) {
 
   const { date, blockTime, text } = await req.json();
 
+  if (
+    typeof date !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(date) ||
+    typeof blockTime !== "string" || !/^\d{2}:\d{2}$/.test(blockTime) ||
+    typeof text !== "string" || text.length === 0 || text.length > 500
+  ) {
+    return NextResponse.json({ error: "Invalid input" }, { status: 400 });
+  }
+
   const task = await prisma.task.create({
     data: { userId: user.id, date, blockTime, text },
   });

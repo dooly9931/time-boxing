@@ -11,10 +11,17 @@ export async function PATCH(
 
   const { id } = await params;
   const body = await req.json();
+  const data: Record<string, unknown> = {};
+  if (typeof body.done === "boolean") data.done = body.done;
+  if (typeof body.text === "string" && body.text.length > 0 && body.text.length <= 500) data.text = body.text;
+
+  if (Object.keys(data).length === 0) {
+    return NextResponse.json({ error: "No valid fields" }, { status: 400 });
+  }
 
   const task = await prisma.task.updateMany({
     where: { id, userId: user.id },
-    data: body,
+    data,
   });
 
   if (task.count === 0) {

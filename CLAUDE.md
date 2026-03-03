@@ -53,4 +53,5 @@ DATABASE_URL="file:./dev.db"
 AUTH_SECRET="..."
 AUTH_GOOGLE_ID="..."
 AUTH_GOOGLE_SECRET="..."
+ALLOWED_EMAILS="user1@gmail.com,user2@gmail.com"  # 선택. 미설정 시 모든 이메일 허용
 ```

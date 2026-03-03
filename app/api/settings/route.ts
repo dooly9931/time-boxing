@@ -21,6 +21,14 @@ export async function PUT(req: Request) {
 
   const { timeUnit, dayStart, dayEnd } = await req.json();
 
+  if (
+    ![5, 10, 15, 30].includes(timeUnit) ||
+    typeof dayStart !== "string" || !/^\d{2}:\d{2}$/.test(dayStart) ||
+    typeof dayEnd !== "string" || !/^\d{2}:\d{2}$/.test(dayEnd)
+  ) {
+    return NextResponse.json({ error: "Invalid input" }, { status: 400 });
+  }
+
   const settings = await prisma.userSettings.upsert({
     where: { userId: user.id },
     update: { timeUnit, dayStart, dayEnd },
